@@ -5,8 +5,8 @@ import spray.routing.HttpServiceActor
 /**
  * @author skovalyov
  */
-class SparkServiceRouter extends HttpServiceActor with DefaultRouter {
+class SparkServiceRouter extends HttpServiceActor with SparkRoute {
 
-  def receive = runRoute(defaultRoute)
+  def receive = runRoute(sparkRoute)
 
 }
