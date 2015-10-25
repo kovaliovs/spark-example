@@ -1,17 +1,17 @@
 package com.example.service
 
-import org.apache.spark.rdd.RDD
-import org.apache.spark.rdd.RDD._
-import scala.util.Random
 import com.example._
 import com.example.repository.DataSetRepository
+import org.apache.spark.rdd.RDD._
+import scala.util.Random
 
 /**
  * @author skovalyov
  */
-class SparkService {
+object SparkService {
 
-  val DataSetSize = 1000
+  val DataSetSize = 100
+  val maxValue = 100
 
   val random = {
     val random = Random
@@ -19,9 +19,11 @@ class SparkService {
     random
   }
 
-  def generateSample(name: String): RDD[Int] = {
-    val data = Stream.continually(random.nextInt()).take(DataSetSize).toList
-    sc.makeRDD(data)
+  def generateSample(name: String): String = {
+    val data = Stream.continually(random.nextInt(maxValue)).take(DataSetSize).toList
+    val rdd = sc.makeRDD(data)
+    DataSetRepository.add(name, rdd)
+    rdd.collect().mkString("\n")
   }
 
   def sum(name: String): Double = {
